@@ -14,7 +14,7 @@ public final class JBDatePickerMonthView: UIStackView {
     // MARK: - Properties
     
     weak var datePickerView: JBDatePickerView!
-    var date: Date!
+    public var date: Date!
     var isPresented: Bool! {
         
         willSet{
@@ -29,6 +29,30 @@ public final class JBDatePickerMonthView: UIStackView {
     var monthInfo: (monthStartDay: Date, monthEndDay: Date, numberOfWeeksInMonth: Int, weekDayInfo: [[Int:JBDay]])!
     var numberOfWeeks: Int!
     var weekViews: [JBDatePickerWeekView]!
+    
+    public func dayViewForDate(_ date: Date) -> JBDatePickerDayView? {
+        if let weekViews = self.weekViews {
+            for weekView in weekViews {
+                for dayView in weekView.dayViews {
+                    if let aDate = dayView.date {
+                        let calendar = NSCalendar.init(identifier: .gregorian)
+                        let year0 = calendar?.component(.year, from: aDate)
+                        let year1 = calendar?.component(.year, from: date)
+                        let month0 = calendar?.component(.month, from: aDate)
+                        let month1 = calendar?.component(.month, from: date)
+                        let day0 = calendar?.component(.day, from: aDate)
+                        let day1 = calendar?.component(.day, from: date)
+                        
+                        if year0 == year1 && month0 == month1 && day0 == day1 {
+                            return dayView
+                        }
+                    }
+                }
+            }
+        }
+        
+        return nil
+    }
     
     // MARK: - Initialization
     

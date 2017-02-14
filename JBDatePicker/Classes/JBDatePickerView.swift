@@ -33,6 +33,10 @@ public final class JBDatePickerView: UIView {
     
     public var presentedMonthView: JBDatePickerMonthView! {
         didSet {
+            if let dayView = presentedMonthView.dayViewForDate(self.dateToPresent) {
+                self.selectedDateView = dayView
+            }
+            
             delegate?.didPresentOtherMonth(presentedMonthView)
             layoutIfNeeded()
         }
@@ -45,6 +49,26 @@ public final class JBDatePickerView: UIView {
         }
         
         didSet {
+            
+            if let date0 = selectedDateView.date, let date1 = dateToPresent {
+                let calendar = NSCalendar.init(identifier: .gregorian)
+                let year0 = calendar!.component(.year, from: date0)
+                let year1 = calendar!.component(.year, from: date1)
+                let month0 = calendar!.component(.month, from: date0)
+                let month1 = calendar!.component(.month, from: date1)
+                let day0 = calendar!.component(.day, from: date0)
+                let day1 = calendar!.component(.day, from: date1)
+                
+                if year0 != year1 || month0 != month1 || day0 != day1 {
+                    if month0 > month1 {
+                        self.loadNextView()
+                    }
+                    else if month0 < month1 {
+                        self.loadPreviousView()
+                    }
+                }
+            }
+            
             selectedDateView.select()
             dateToPresent = selectedDateView.date
         }
@@ -120,7 +144,7 @@ extension JBDatePickerView {
 
 extension JBDatePickerView {
     
-    func monthDescriptionForDate(_ date: Date) -> String {
+    public func monthDescriptionForDate(_ date: Date) -> String {
 
         let monthFormatString = "MMMM yyyy"
         dateFormatter.dateFormat = monthFormatString
@@ -132,6 +156,8 @@ extension JBDatePickerView {
 
         return dateFormatter.string(from: date)
     }
+    
+    
     
     ///this will call the delegate as well as set the selectedDate on the datePicker. 
     func didTapDayView(dayView: JBDatePickerDayView) {

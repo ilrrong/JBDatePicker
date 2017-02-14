@@ -8,13 +8,13 @@
 
 import UIKit
 
-final class JBDatePickerWeekView: UIStackView {
+public class JBDatePickerWeekView: UIStackView {
 
     // MARK: - Properties
     private weak var datePickerView: JBDatePickerView!
     private weak var monthView: JBDatePickerMonthView!
     private var index: Int!
-    private var dayViews: [JBDatePickerDayView]!
+    public var dayViews: [JBDatePickerDayView]!
     
 
     // MARK: - Initialization
@@ -37,7 +37,7 @@ final class JBDatePickerWeekView: UIStackView {
         super.init(frame: frame)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

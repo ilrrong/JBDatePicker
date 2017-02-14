@@ -59,7 +59,6 @@ public final class JBDatePickerDayView: UIView {
             textLabel.textColor = datePickerView.delegate?.colorForDayLabelInMonth
         }
         else{
-            
             if let shouldShow = datePickerView.delegate?.shouldShowMonthOutDates {
                 if shouldShow {
                     textLabel.textColor = datePickerView.delegate?.colorForDayLabelOutOfMonth
@@ -80,7 +79,21 @@ public final class JBDatePickerDayView: UIView {
         //select selected day
         if date == datePickerView.dateToPresent.stripped() {
             guard self.dayInfo.isInMonth else { return }
-            datePickerView.selectedDateView = self
+            
+            if let shouldShow = datePickerView.delegate?.shouldShowMonthOutDates {
+                if shouldShow {
+                    if datePickerView.presentedMonthView == self.monthView {
+                        datePickerView.selectedDateView = self
+                    }
+                    else if datePickerView.selectedDateView == nil {
+                        datePickerView.selectedDateView = self
+                    }
+                }
+                else {
+                    datePickerView.selectedDateView = self
+                }
+            }
+            
             //self.backgroundColor = randomColor()
         }
 
