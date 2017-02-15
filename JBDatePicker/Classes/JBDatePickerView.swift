@@ -51,6 +51,10 @@ public final class JBDatePickerView: UIView {
         didSet {
             
             if let date0 = selectedDateView.date, let date1 = dateToPresent {
+                
+                
+                
+                
                 let calendar = NSCalendar.init(identifier: .gregorian)
                 let year0 = calendar!.component(.year, from: date0)
                 let year1 = calendar!.component(.year, from: date1)
@@ -59,14 +63,19 @@ public final class JBDatePickerView: UIView {
                 let day0 = calendar!.component(.day, from: date0)
                 let day1 = calendar!.component(.day, from: date1)
                 
-                if year0 != year1 || month0 != month1 || day0 != day1 {
-                    if month0 > month1 {
-                        self.loadNextView()
-                    }
-                    else if month0 < month1 {
-                        self.loadPreviousView()
+                let inMonth = calendar!.component(.month, from: self.presentedMonthView.date)
+                
+                if month0 != inMonth {
+                    if year0 != year1 || month0 != month1 || day0 != day1 {
+                        if month0 > month1 {
+                            self.loadNextView()
+                        }
+                        else if month0 < month1 {
+                            self.loadPreviousView()
+                        }
                     }
                 }
+                
             }
             
             selectedDateView.select()
